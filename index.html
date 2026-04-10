@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MedCore HMS — Hospital Management System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v8M8 12h8"/></svg>
+      </div>
+      <div>
+        <div class="logo-name">MedCore</div>
+        <div class="logo-tag">Hospital Management</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-section">Overview</div>
+    <button class="nav-item active" onclick="showView('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </button>
+
+    <div class="nav-section">Clinical</div>
+    <button class="nav-item" onclick="showView('patients',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Patients
+      <span class="nav-badge">12</span>
+    </button>
+    <button class="nav-item" onclick="showView('appointments',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Appointments
+    </button>
+    <button class="nav-item" onclick="showView('doctors',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Doctors
+    </button>
+    <button class="nav-item" onclick="showView('wards',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Wards & Beds
+    </button>
+    <button class="nav-item" onclick="showView('lab',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>
+      Laboratory
+    </button>
+
+    <div class="nav-section">Admin</div>
+    <button class="nav-item" onclick="showView('billing',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Billing
+    </button>
+    <button class="nav-item" onclick="showView('pharmacy',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.5 2h-13C4.1 2 3 3.1 3 4.5V6h18V4.5C21 3.1 19.9 2 18.5 2z"/><path d="M3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6"/><line x1="12" y1="10" x2="12" y2="16"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+      Pharmacy
+    </button>
+    <button class="nav-item" onclick="showView('reports',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Reports
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar" id="sidebar-avatar">DR</div>
+      <div>
+        <div class="user-name" id="sidebar-user-name">Dr. Rajan Sharma</div>
+        <div class="user-role" id="sidebar-user-role">Chief Medical Officer</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-title" id="page-title">Dashboard</div>
+    <div class="topbar-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search patients, doctors…" id="global-search" oninput="handleSearch(this.value)"/>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-outline btn-sm" id="auth-button" onclick="openAuthModal()">Sign In</button>
+      <span id="auth-role-chip" class="badge badge-gray" style="display:none"></span>
+      <button class="icon-btn notif-dot" title="Notifications" onclick="showToast('3 new critical alerts')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <button class="icon-btn" title="Settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ===== DASHBOARD VIEW ===== -->
+    <div class="view active" id="view-dashboard">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Patients</div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div class="stat-value" style="color:var(--blue)">1,284</div>
+            <div class="stat-icon" style="background:var(--blue-light)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          </div>
+          <div class="stat-change up">↑ 8.2% this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Beds Occupied</div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div class="stat-value" style="color:var(--red)">187<span style="font-size:16px;color:var(--text-muted)">/240</span></div>
+            <div class="stat-icon" style="background:var(--red-light)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+          </div>
+          <div class="stat-change down">↑ 78% occupancy rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Today's Appointments</div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div class="stat-value" style="color:var(--accent)">47</div>
+            <div class="stat-icon" style="background:var(--accent-light)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          </div>
+          <div class="stat-change up">↑ 5 pending confirmations</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Monthly Revenue</div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <div class="stat-value" style="color:var(--purple)">₹48.2L</div>
+            <div class="stat-icon" style="background:var(--purple-light)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          </div>
+          <div class="stat-change up">↑ 12.5% vs last month</div>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div style="margin-bottom:20px">
+        <div class="alert alert-red">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div><div class="alert-title">ICU Critical — Bed 4</div><div class="alert-desc">Patient Ramesh Gupta (ID: P-0041) requires immediate attention. BP: 180/120 mmHg</div></div>
+          <button class="btn btn-sm btn-outline" style="margin-left:auto;white-space:nowrap" onclick="showToast('Alert acknowledged')">Acknowledge</button>
+        </div>
+        <div class="alert alert-amber">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div><div class="alert-title">Low Stock Warning</div><div class="alert-desc">Amoxicillin 500mg running low — 12 strips remaining. Reorder recommended.</div></div>
+          <button class="btn btn-sm btn-outline" style="margin-left:auto;white-space:nowrap" onclick="showView('pharmacy',document.querySelectorAll('.nav-item')[7]);showToast('Navigating to Pharmacy')">View</button>
+        </div>
+      </div>
+
+      <!-- Main content row -->
+      <div class="grid-65-35" style="margin-bottom:20px">
+        <!-- Admissions Chart -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Patient Admissions — Last 7 Days</div>
+            <div style="display:flex;gap:12px;align-items:center;font-size:12px;color:var(--text-muted)">
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:var(--accent);display:inline-block"></span>Admissions</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:var(--blue);display:inline-block"></span>Discharges</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chart-bars" id="admissions-chart">
+              <!-- Rendered by JS -->
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px" id="admissions-labels"></div>
+          </div>
+        </div>
+
+        <!-- Today's Appointments -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Today's Schedule</div>
+            <button class="btn btn-sm btn-outline" onclick="showView('appointments',document.querySelectorAll('.nav-item')[2])">View All</button>
+          </div>
+          <div class="card-body" style="padding-top:8px">
+            <div class="appt-item">
+              <div class="appt-time">09:00</div>
+              <div class="appt-dot" style="background:var(--accent)"></div>
+              <div class="appt-info"><div class="appt-name">Priya Mehta</div><div class="appt-type">General Checkup · Dr. Sharma</div></div>
+              <span class="badge badge-green">Done</span>
+            </div>
+            <div class="appt-item">
+              <div class="appt-time">10:30</div>
+              <div class="appt-dot" style="background:var(--blue)"></div>
+              <div class="appt-info"><div class="appt-name">Arjun Verma</div><div class="appt-type">Cardiology · Dr. Kapoor</div></div>
+              <span class="badge badge-blue">In Progress</span>
+            </div>
+            <div class="appt-item">
+              <div class="appt-time">11:15</div>
+              <div class="appt-dot" style="background:var(--amber)"></div>
+              <div class="appt-info"><div class="appt-name">Sunita Rao</div><div class="appt-type">Orthopedics · Dr. Nair</div></div>
+              <span class="badge badge-amber">Waiting</span>
+            </div>
+            <div class="appt-item">
+              <div class="appt-time">12:00</div>
+              <div class="appt-dot" style="background:var(--text-muted)"></div>
+              <div class="appt-info"><div class="appt-name">Vikram Singh</div><div class="appt-type">Neurology · Dr. Reddy</div></div>
+              <span class="badge badge-gray">Scheduled</span>
+            </div>
+            <div class="appt-item">
+              <div class="appt-time">14:00</div>
+              <div class="appt-dot" style="background:var(--purple)"></div>
+              <div class="appt-info"><div class="appt-name">Ananya Das</div><div class="appt-type">Dermatology · Dr. Patel</div></div>
+              <span class="badge badge-gray">Scheduled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom row -->
+      <div class="grid-2">
+        <!-- Department wise -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Department Occupancy</div>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px">ICU</span><span id="dash-occ-text-icu" style="font-size:13px;font-weight:500;color:var(--red)">18/20 <span style="font-weight:400;color:var(--text-muted);font-size:12px">90%</span></span></div>
+                <div class="progress-bar"><div id="dash-occ-prog-icu" class="progress-fill" style="width:90%;background:var(--red)"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px">General Ward</span><span id="dash-occ-text-general" style="font-size:13px;font-weight:500;color:var(--amber)">68/80 <span style="font-weight:400;color:var(--text-muted);font-size:12px">85%</span></span></div>
+                <div class="progress-bar"><div id="dash-occ-prog-general" class="progress-fill" style="width:85%;background:var(--amber)"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px">Maternity</span><span id="dash-occ-text-maternity" style="font-size:13px;font-weight:500;color:var(--accent)">22/30 <span style="font-weight:400;color:var(--text-muted);font-size:12px">73%</span></span></div>
+                <div class="progress-bar"><div id="dash-occ-prog-maternity" class="progress-fill" style="width:73%;background:var(--accent)"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px">Pediatrics</span><span id="dash-occ-text-pediatrics" style="font-size:13px;font-weight:500;color:var(--blue)">31/50 <span style="font-weight:400;color:var(--text-muted);font-size:12px">62%</span></span></div>
+                <div class="progress-bar"><div id="dash-occ-prog-pediatrics" class="progress-fill" style="width:62%;background:var(--blue)"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px">Surgery</span><span id="dash-occ-text-surgery" style="font-size:13px;font-weight:500;color:var(--purple)">28/60 <span style="font-weight:400;color:var(--text-muted);font-size:12px">47%</span></span></div>
+                <div class="progress-bar"><div id="dash-occ-prog-surgery" class="progress-fill" style="width:47%;background:var(--purple)"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Patient distribution donut -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Patient Distribution</div>
+          </div>
+          <div class="card-body">
+            <div class="donut-wrap">
+              <svg width="110" height="110" viewBox="0 0 36 36" style="transform:rotate(-90deg);flex-shrink:0">
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--border)" stroke-width="3"/>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--blue)" stroke-width="3" stroke-dasharray="35 65" stroke-dashoffset="0"/>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--accent)" stroke-width="3" stroke-dasharray="28 72" stroke-dashoffset="-35"/>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--amber)" stroke-width="3" stroke-dasharray="18 82" stroke-dashoffset="-63"/>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--purple)" stroke-width="3" stroke-dasharray="12 88" stroke-dashoffset="-81"/>
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--red)" stroke-width="3" stroke-dasharray="7 93" stroke-dashoffset="-93"/>
+              </svg>
+              <div class="donut-legend">
+                <div class="donut-item"><div class="donut-dot" style="background:var(--blue)"></div>General<div class="donut-val" style="color:var(--blue)">35%</div></div>
+                <div class="donut-item"><div class="donut-dot" style="background:var(--accent)"></div>Surgery<div class="donut-val" style="color:var(--accent)">28%</div></div>
+                <div class="donut-item"><div class="donut-dot" style="background:var(--amber)"></div>Pediatrics<div class="donut-val" style="color:var(--amber)">18%</div></div>
+                <div class="donut-item"><div class="donut-dot" style="background:var(--purple)"></div>Maternity<div class="donut-val" style="color:var(--purple)">12%</div></div>
+                <div class="donut-item"><div class="donut-dot" style="background:var(--red)"></div>ICU<div class="donut-val" style="color:var(--red)">7%</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PATIENTS VIEW ===== -->
+    <div class="view" id="view-patients">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div>
+          <div style="font-size:22px;font-weight:600;font-family:'Playfair Display',serif;margin-bottom:4px">Patients</div>
+          <div style="font-size:13px;color:var(--text-muted)"><span id="patient-stats-summary">Loading patient data...</span></div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-add-patient')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Register Patient
+        </button>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" onclick="setTab(this,'patients','all')">All Patients</div>
+        <div class="tab" onclick="setTab(this,'patients','admitted')">Currently Admitted</div>
+        <div class="tab" onclick="setTab(this,'patients','opd')">OPD</div>
+        <div class="tab" onclick="setTab(this,'patients','discharged')">Discharged</div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="topbar-search" style="width:220px">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Search patients…" style="border:none;background:none;outline:none;font-size:13px;font-family:inherit;width:100%;color:var(--text)"/>
+            </div>
+            <select class="form-control" style="padding:7px 10px;font-size:13px;width:auto">
+              <option>All Departments</option>
+              <option>ICU</option>
+              <option>General Ward</option>
+              <option>Maternity</option>
+              <option>Pediatrics</option>
+              <option>Surgery</option>
+            </select>
+          </div>
+          <div style="font-size:13px;color:var(--text-muted)">Showing 1–10 of 1,284</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Patient ID</th>
+                <th>Age / Gender</th>
+                <th>Department</th>
+                <th>Doctor</th>
+                <th>Status</th>
+                <th>Admitted</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="patients-table-body"></tbody>
+          </table>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:13px;color:var(--text-muted)">Page 1 of 129</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-outline btn-sm">Previous</button>
+            <button class="btn btn-outline btn-sm">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== APPOINTMENTS VIEW ===== -->
+    <div class="view" id="view-appointments">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div>
+          <div style="font-size:22px;font-weight:600;font-family:'Playfair Display',serif;margin-bottom:4px">Appointments</div>
+          <div style="font-size:13px;color:var(--text-muted)">Today: 47 appointments scheduled</div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('modal-add-appt')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Book Appointment
+        </button>
+      </div>
+
+      <div class="grid-65-35">
+        <!-- Calendar view -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">April 2026</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-outline btn-sm">◀</button>
+              <button class="btn btn-outline btn-sm">▶</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="mini-calendar"></div>
+          </div>
+        </div>
+
+        <!-- Appointment list -->
+        <div class="card">
+          <div class="card-header"><div class="card-title">April 3 — Schedule</div></div>
+          <div style="padding:0 4px">
+            <div class="appt-item" style="padding:11px 16px">
+              <div class="appt-time">08:30</div>
+              <div class="appt-dot" style="background:var(--accent)"></div>
+              <div class="appt-info"><div class="appt-name">Geeta Krishnan</div><div class="appt-type">General · Dr. Sharma</div></div>
+              <span class="badge badge-green">Done</span>
+            </div>
+            <div class="appt-item" style="padding:11px 16px">
+              <div class="appt-time">09:00</div>
+              <div class="appt-dot" style="background:var(--accent)"></div>
+              <div class="appt-info"><div class="appt-name">Priya Mehta</div><div class="appt-type">General · Dr. Sharma</div></div>
+              <span class="badge badge-green">Done</span>
+            </div>
+            <div class="appt-item" style="padding:11px 16px">
+              <div class="appt-time">10:30</div>
+              <div class="appt-dot" style="background:var(--blue)"></div>
+              <div class="appt-info"><div class="appt-name">Arjun Verma</div><div class="appt-type">Cardiology · Dr. Kapoor</div></div>
+              <span class="badge badge-blue">In Progress</span>
+            </div>
+            <div class="appt-item" style="padding:11px 16px">
+              <div class="appt-time">11:15</div>
+              <div class="appt-dot" style="background:var(--amber)"></div>
+              <div class="appt-info"><div class="appt-name">Sunita Rao</div><div class="appt-type">Ortho · Dr. Nair</div></div>
+              <span class="badge badge-amber">Waiting</span>
+            </div>
+            <div class="appt-item" style="padding:11px 16px">
+              <div class="appt-time">12:00</div>
+              <div class="appt-dot" style="background:var(--text-muted)"></div>
+              <div class="appt-info"><div class="appt-name">Vikram Singh</div><div class="appt-type">Neuro · Dr. Reddy</div></div>
+              <span class="badge badge-gray">Upcoming</span>
+            </div>
+            <div class="appt-item" style="padding:11px 16px">
+              <div class="appt-time">14:00</div>
+              <div class="appt-dot" style="background:var(--purple)"></div>
+              <div class="appt-info"><div class="appt-name">Ananya Das</div><div class="appt-type">Derma · Dr. Patel</div></div>
+              <span class="badge badge-gray">Upcoming</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DOCTORS VIEW ===== -->
+    <div class="view" id="view-doctors">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div>
+          <div style="font-size:22px;font-weight:600;font-family:'Playfair Display',serif;margin-bottom:4px">Doctors & Staff</div>
+          <div style="font-size:13px;color:var(--text-muted)"><span id="doctor-stats-summary">Loading doctor data...</span></div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('add-doctor-modal')">+ Add Doctor</button>
+      </div>
+      <div class="grid-3" id="doctors-grid"></div>
+    </div>
+
+    <!-- ===== WARDS VIEW ===== -->
+    <div class="view" id="view-wards">
+      <div style="margin-bottom:20px">
+        <div style="font-size:22px;font-weight:600;font-family:'Playfair Display',serif;margin-bottom:4px">Wards & Bed Management</div>
+        <div style="font-size:13px;color:var(--text-muted)"><span id="beds-stats-summary">Loading bed data...</span></div>
+      </div>
+
+      <div style="display:flex;gap:16px;margin-bottom:20px">
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px"><div style="width:14px;height:14px;border-radius:3px;background:var(--red-light);border:1.5px solid rgba(192,57,43,0.2)"></div>Occupied</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px"><div style="width:14px;height:14px;border-radius:3px;background:var(--accent-light);border:1.5px solid rgba(26,94,74,0.2)"></div>Available</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:13px"><div style="width:14px;height:14px;border-radius:3px;background:var(--amber-light);border:1.5px solid rgba(217,119,6,0.2)"></div>Maintenance</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><div class="card-title">ICU — Ward A <span id="ward-badge-icu" class="badge badge-red" style="margin-left:8px">90% full</span></div></div>
+          <div class="card-body"><div class="bed-grid" id="beds-icu"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">General Ward — Ward B <span id="ward-badge-general" class="badge badge-amber" style="margin-left:8px">85% full</span></div></div>
+          <div class="card-body"><div class="bed-grid" id="beds-general"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Maternity — Ward C <span id="ward-badge-maternity" class="badge badge-blue" style="margin-left:8px">73% full</span></div></div>
+          <div class="card-body"><div class="bed-grid" id="beds-maternity"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Pediatrics — Ward D <span id="ward-badge-pediatrics" class="badge badge-green" style="margin-left:8px">62% full</span></div></div>
+          <div class="card-body"><div class="bed-grid" id="beds-pediatrics"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LAB VIEW ===== -->
+    <div class="view" id="view-lab">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div>
+          <div style="font-size:22px;font-weight:600;font-family:'Playfair Display',serif;margin-bottom:4px">Laboratory</div>
+          <div style="font-size:13px;color:var(--text-muted)"><span id="lab-stats-summary">Loading lab data...</span></div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('add-lab-test-modal')">+ New Test Request</button>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Pending Tests</div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Test ID</th><th>Patient</th><th>Test</th><th>Ordered By</th><th>Priority</th><th>Status</th><th>Time</th></tr></thead>
+            <tbody id="lab-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== BILLING VIEW ===== -->
+    <div class="view" id="view-billing">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div>
+          <div style="font-size:22px;font-weight:600;font-family:'Playfair Display',serif;margin-bottom:4px">Billing & Payments</div>
+          <div style="font-size:13px;color:var(--text-muted)"><span id="billing-stats-summary">Loading billing data...</span></div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('add-invoice-modal')">+ New Invoice</button>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
+        <div class="stat-card"><div class="stat-label">Total Billed</div><div class="stat-value" style="color:var(--accent);font-size:22px">₹60.6L</div><div class="stat-change up">This month</div></div>
+        <div class="stat-card"><div class="stat-label">Collected</div><div class="stat-value" style="color:var(--blue);font-size:22px">₹48.2L</div><div class="stat-change up">79.5% collection rate</div></div>
+        <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" style="color:var(--red);font-size:22px">₹12.4L</div><div class="stat-change down">18 overdue invoices</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Recent Invoices</div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Invoice #</th><th>Patient</th><th>Services</th><th>Amount</th><th>Insurance</th><th>Net Due</th><th>Status</th></tr></thead>
+            <tbody id="billing-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== PHARMACY VIEW ===== -->
+    <div class="view" id="view-pharmacy">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div>
+          <div style="font-size:22px;font-weight:600;font-family:'Playfair Display',serif;margin-bottom:4px">Pharmacy</div>
+          <div style="font-size:13px;color:var(--text-muted)"><span id="pharmacy-stats-summary">Loading pharmacy data...</span></div>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('add-medicine-modal')">+ Add Medicine</button>
+      </div>
+      <div class="alert alert-amber" style="margin-bottom:20px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div><div class="alert-title">12 medicines running low</div><div class="alert-desc">Immediate reorder recommended for Amoxicillin, Metformin, Aspirin and 9 others</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Medicine Inventory</div></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Medicine</th><th>Category</th><th>Stock</th><th>Unit</th><th>Expiry</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="pharmacy-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== REPORTS VIEW ===== -->
+    <div class="view" id="view-reports">
+      <div style="margin-bottom:20px">
+        <div style="font-size:22px;font-weight:600;font-family:'Playfair Display',serif;margin-bottom:4px">Reports & Analytics</div>
+        <div style="font-size:13px;color:var(--text-muted)">Hospital performance overview</div>
+      </div>
+      <div class="grid-2" style="margin-bottom:20px">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Monthly Revenue Trend</div></div>
+          <div class="card-body"><div class="chart-bars" id="revenue-chart" style="height:140px"></div><div id="revenue-labels" style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">OPD vs IPD Trend</div></div>
+          <div class="card-body"><div class="chart-bars" id="opd-chart" style="height:140px"></div><div style="display:flex;justify-content:space-between;margin-top:6px" id="opd-labels"></div></div>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="card"><div class="card-header"><div class="card-title">Available Reports</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:8px" id="report-list"></div></div>
+        <div class="card" style="grid-column:span 2"><div class="card-header"><div class="card-title">Key Performance Indicators</div></div><div class="card-body"><div class="grid-2" id="kpi-grid"></div></div></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-add-patient">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Register New Patient</div>
+      <button class="icon-btn" onclick="closeModal('modal-add-patient')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>First Name *</label><input id="add-patient-first-name" class="form-control" placeholder="e.g. Priya" type="text"/><div class="field-error" id="err-add-patient-first-name"></div></div>
+        <div class="form-group"><label>Last Name *</label><input id="add-patient-last-name" class="form-control" placeholder="e.g. Mehta" type="text"/><div class="field-error" id="err-add-patient-last-name"></div></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Date of Birth *</label><input id="add-patient-dob" class="form-control" type="date"/><div class="field-error" id="err-add-patient-dob"></div></div>
+        <div class="form-group"><label>Gender *</label><select id="add-patient-gender" class="form-control"><option>Select gender</option><option>Male</option><option>Female</option><option>Other</option></select><div class="field-error" id="err-add-patient-gender"></div></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone Number *</label><input id="add-patient-phone" class="form-control" placeholder="+91 9876543210" type="tel"/><div class="field-error" id="err-add-patient-phone"></div></div>
+        <div class="form-group"><label>Emergency Contact</label><input id="add-patient-emergency-contact" class="form-control" placeholder="+91 9876543210" type="tel"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Blood Group</label><select id="add-patient-blood-group" class="form-control"><option>Unknown</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select></div>
+        <div class="form-group"><label>Admission Type</label><select id="add-patient-admission-type" class="form-control"><option>OPD</option><option>IPD</option><option>Emergency</option></select></div>
+      </div>
+      <div class="form-group" style="margin-bottom:14px"><label>Address</label><input id="add-patient-address" class="form-control" placeholder="Full address" type="text"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Assigning Doctor</label><select id="add-patient-doctor" class="form-control"><option>Dr. Sharma (General)</option><option>Dr. Kapoor (Cardiology)</option><option>Dr. Nair (Ortho)</option><option>Dr. Reddy (Neuro)</option><option>Dr. Patel (Derma)</option></select></div>
+        <div class="form-group"><label>Insurance Provider</label><input id="add-patient-insurance-provider" class="form-control" placeholder="e.g. Star Health, PMJAY" type="text"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-patient')">Cancel</button>
+      <button class="btn btn-primary" onclick="createPatientFromModal()">Register Patient</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-add-appt">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Book Appointment</div>
+      <button class="icon-btn" onclick="closeModal('modal-add-appt')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Patient *</label><input id="book-appt-patient" class="form-control" placeholder="Select or search patient..." type="text"/><div class="field-error" id="err-book-appt-patient"></div></div>
+        <div class="form-group"><label>Department *</label><select id="book-appt-department" class="form-control"><option>General Medicine</option><option>Cardiology</option><option>Orthopedics</option><option>Neurology</option><option>Dermatology</option><option>Pediatrics</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Doctor *</label><select id="book-appt-doctor" class="form-control"><option>Dr. Sharma</option><option>Dr. Kapoor</option><option>Dr. Nair</option><option>Dr. Reddy</option><option>Dr. Patel</option></select></div>
+        <div class="form-group"><label>Appointment Type</label><select id="book-appt-type" class="form-control"><option>Consultation</option><option>Follow-up</option><option>Emergency</option><option>Procedure</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Date *</label><input id="book-appt-date" class="form-control" type="date"/><div class="field-error" id="err-book-appt-date"></div></div>
+        <div class="form-group"><label>Time Slot *</label><select id="book-appt-time" class="form-control"><option value="">Select time</option><option value="09:00">09:00 AM</option><option value="09:30">09:30 AM</option><option value="10:00">10:00 AM</option><option value="10:30">10:30 AM</option><option value="11:00">11:00 AM</option><option value="14:00">02:00 PM</option><option value="15:00">03:00 PM</option></select><div class="field-error" id="err-book-appt-time"></div></div>
+      </div>
+      <div class="form-group"><label>Notes / Chief Complaint</label><textarea id="book-appt-notes" class="form-control" rows="3" placeholder="Brief description of symptoms or reason for visit…" style="resize:vertical"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-add-appt')">Cancel</button>
+      <button class="btn btn-primary" onclick="createAppointmentFromModal()">Book Appointment</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-auth">
+  <div class="modal" style="width:420px">
+    <div class="modal-header">
+      <div class="modal-title">Sign In</div>
+      <button class="icon-btn" onclick="closeModal('modal-auth')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group" style="margin-bottom:12px">
+        <label>Email</label>
+        <input id="auth-email" class="form-control" placeholder="admin@medcore.local" type="email"/>
+        <div class="field-error" id="err-auth-email"></div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input id="auth-password" class="form-control" placeholder="********" type="password"/>
+        <div class="field-error" id="err-auth-password"></div>
+      </div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:10px">
+        Demo accounts: admin, reception, doctor, lab, pharmacy.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('modal-auth')">Cancel</button>
+      <button class="btn btn-primary" onclick="loginFromModal()">Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Doctor Modal -->
+<div class="modal-overlay" id="add-doctor-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add New Doctor</div>
+      <button class="icon-btn" onclick="closeModal('add-doctor-modal')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="add-doctor-name" class="form-control" placeholder="Dr. John Smith" required>
+          <div class="field-error" id="err-add-doctor-name"></div>
+        </div>
+        <div class="form-group">
+          <label>Department *</label>
+          <select id="add-doctor-department" class="form-control" required>
+            <option value="">Select Department</option>
+            <option value="General Medicine">General Medicine</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Orthopedics">Orthopedics</option>
+            <option value="Neurology">Neurology</option>
+            <option value="Dermatology">Dermatology</option>
+            <option value="Maternity">Maternity</option>
+            <option value="Surgery">Surgery</option>
+            <option value="Pediatrics">Pediatrics</option>
+          </select>
+          <div class="field-error" id="err-add-doctor-department"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Experience (Years) *</label>
+          <input type="number" id="add-doctor-experience" class="form-control" placeholder="5" min="0" max="50" required>
+          <div class="field-error" id="err-add-doctor-experience"></div>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="add-doctor-status" class="form-control">
+            <option value="on-duty">On Duty</option>
+            <option value="off">Off Duty</option>
+            <option value="surgery">In Surgery</option>
+          </select>
+          <div class="field-error" id="err-add-doctor-status"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-doctor-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createDoctorFromModal()">Add Doctor</button>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<!-- Add Lab Test Modal -->
+<div class="modal-overlay" id="add-lab-test-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">New Lab Test Request</div>
+      <button class="icon-btn" onclick="closeModal('add-lab-test-modal')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Patient *</label>
+          <input type="text" id="add-lab-patient" class="form-control" placeholder="Enter patient code or name" required>
+          <div class="field-error" id="err-add-lab-patient"></div>
+        </div>
+        <div class="form-group">
+          <label>Test Name *</label>
+          <select id="add-lab-test-name" class="form-control" required>
+            <option value="">Select Test</option>
+            <option value="Complete Blood Count">Complete Blood Count</option>
+            <option value="Blood Glucose">Blood Glucose</option>
+            <option value="Lipid Profile">Lipid Profile</option>
+            <option value="Liver Function Test">Liver Function Test</option>
+            <option value="Kidney Function Test">Kidney Function Test</option>
+            <option value="Urine Culture">Urine Culture</option>
+            <option value="ABG Analysis">ABG Analysis</option>
+            <option value="MRI Brain Report">MRI Brain Report</option>
+            <option value="X-Ray Chest">X-Ray Chest</option>
+          </select>
+          <div class="field-error" id="err-add-lab-test-name"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Priority *</label>
+          <select id="add-lab-priority" class="form-control" required>
+            <option value="routine">Routine</option>
+            <option value="urgent">Urgent</option>
+            <option value="stat">STAT</option>
+          </select>
+          <div class="field-error" id="err-add-lab-priority"></div>
+        </div>
+        <div class="form-group">
+          <label>Ordered By (Doctor) *</label>
+          <select id="add-lab-doctor" class="form-control" required>
+            <option value="">Select Doctor</option>
+          </select>
+          <div class="field-error" id="err-add-lab-doctor"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-lab-test-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createLabTestFromModal()">Create Test Request</button>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<!-- Add Medicine Modal -->
+<div class="modal-overlay" id="add-medicine-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add New Medicine</div>
+      <button class="icon-btn" onclick="closeModal('add-medicine-modal')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Medicine Name *</label>
+          <input type="text" id="add-medicine-name" class="form-control" placeholder="e.g., Paracetamol" required>
+          <div class="field-error" id="err-add-medicine-name"></div>
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select id="add-medicine-category" class="form-control" required>
+            <option value="">Select Category</option>
+            <option value="Pain Relief">Pain Relief</option>
+            <option value="Antibiotics">Antibiotics</option>
+            <option value="Cardiovascular">Cardiovascular</option>
+            <option value="Diabetes">Diabetes</option>
+            <option value="Respiratory">Respiratory</option>
+            <option value="Gastrointestinal">Gastrointestinal</option>
+            <option value="Neurological">Neurological</option>
+            <option value="Vitamins">Vitamins</option>
+            <option value="Others">Others</option>
+          </select>
+          <div class="field-error" id="err-add-medicine-category"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Stock Quantity *</label>
+          <input type="number" id="add-medicine-stock" class="form-control" placeholder="100" min="0" required>
+          <div class="field-error" id="err-add-medicine-stock"></div>
+        </div>
+        <div class="form-group">
+          <label>Unit *</label>
+          <select id="add-medicine-unit" class="form-control" required>
+            <option value="tablets">Tablets</option>
+            <option value="capsules">Capsules</option>
+            <option value="ml">ml</option>
+            <option value="mg">mg</option>
+            <option value="units">Units</option>
+            <option value="vials">Vials</option>
+          </select>
+          <div class="field-error" id="err-add-medicine-unit"></div>
+        </div>
+      </div>
+      <div class="form-group" style="width: calc(50% - 5px);">
+        <label>Expiry Date *</label>
+        <input type="date" id="add-medicine-expiry" class="form-control" required>
+        <div class="field-error" id="err-add-medicine-expiry"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-medicine-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createMedicineFromModal()">Add Medicine</button>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<!-- Add Invoice Modal -->
+<div class="modal-overlay" id="add-invoice-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Create New Invoice</div>
+      <button class="icon-btn" onclick="closeModal('add-invoice-modal')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group" style="width: 100%;">
+          <label>Patient *</label>
+          <input type="text" id="add-invoice-patient" class="form-control" placeholder="Enter patient code or name" required>
+          <div class="field-error" id="err-add-invoice-patient"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Services *</label>
+        <textarea id="add-invoice-services" class="form-control" placeholder="e.g., Consultation, X-Ray, Blood Test" rows="3" required></textarea>
+        <div class="field-error" id="err-add-invoice-services"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Total Amount (₹) *</label>
+          <input type="number" id="add-invoice-amount" class="form-control" placeholder="5000" min="0" step="0.01" required>
+          <div class="field-error" id="err-add-invoice-amount"></div>
+        </div>
+        <div class="form-group">
+          <label>Insurance Amount (₹)</label>
+          <input type="number" id="add-invoice-insurance" class="form-control" placeholder="2000" min="0" step="0.01" value="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Net Amount (₹) *</label>
+          <input type="number" id="add-invoice-net" class="form-control" placeholder="3000" min="0" step="0.01" required readonly>
+          <div class="field-error" id="err-add-invoice-net"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('add-invoice-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="createInvoiceFromModal()">Create Invoice</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

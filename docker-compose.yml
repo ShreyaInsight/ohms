@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: medcore-postgres
+    environment:
+      - POSTGRES_DB=medcore_hms
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  medcore-hms:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    container_name: medcore-hms
+    depends_on:
+      - postgres
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/medcore_hms
+      - FRONTEND_ORIGIN=http://localhost:4000
+      - TOKEN_SECRET=change-this-in-production
+    volumes:
+      - ./index.html:/app/public/index.html
+      - ./styles.css:/app/public/styles.css
+      - ./script.js:/app/public/script.js
+      - ./backend/src:/app/src
+
+volumes:
+  pg_data:

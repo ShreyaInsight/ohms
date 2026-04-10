@@ -1,0 +1,5 @@
+backend/node_modules/
+backend/data/
+backend/.env
+COMPLETE_SOLUTION.md
+CHANGES_SUMMARY.md
